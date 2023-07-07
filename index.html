@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Websocket</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding-bottom: 40px; /* Add padding to the bottom of the body to make space for the fixed title */
+        }
+    
+        form {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+    
+        input[type="text"] {
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+        }
+    
+        button[type="submit"] {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+    
+        li {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+         .fixed-title {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #fff;
+            text-align: center;
+            padding: 10px;
+            font-size: 24px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+    </style>
+    
+</head>
+<body>
+    <form>
+        <input type="text">
+        <button type="submit">互动一下</button>
+    </form>
+    <ul></ul>
+    <div class="fixed-title">
+        Family Chat Box
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const form = document.querySelector('form');
+        const input = document.querySelector('input');
+        const ul = document.querySelector('ul');
+
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            if(input.value) {
+                socket.emit('chat message', input.value);
+                input.value = '';
+            } 
+        }); 
+
+        socket.on('chat message', msg => {
+            const li = document.createElement('li');
+            li.textContent = msg;
+            ul.appendChild(li);
+        });
+    </script>
+
+</body>
+</html>
